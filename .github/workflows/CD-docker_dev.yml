@@ -38,7 +38,7 @@ jobs:
           TEST_DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
           echo ${#TEST_GITHUB_TOKEN}
-          echo ${#TEST_SECRET}
+          echo ${#TEST_DOCKERHUB_USERNAME}
       - name: Clear Space
         run: |
           rm -rf /usr/share/dotnet
