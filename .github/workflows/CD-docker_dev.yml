@@ -33,14 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: runpodnqs-dockerhub
     steps:
-      - name: Example step
-        run: |
-          echo "This is an example script."
-          echo ${{ secrets.DOCKERHUB_USERNAME }}
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - name: Clear Space
         run: |
           rm -rf /usr/share/dotnet
