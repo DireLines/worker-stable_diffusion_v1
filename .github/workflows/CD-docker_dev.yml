@@ -32,13 +32,10 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - name: Test
-        env:
-          TEST_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-          TEST_DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      - name: Example step
         run: |
-          echo $TEST_DOCKERHUB_TOKEN
-          echo $TEST_DOCKERHUB_USERNAME
+          echo "This is an example script."
+          echo ${{ secrets.DOCKERHUB_USERNAME }}
       - name: Clear Space
         run: |
           rm -rf /usr/share/dotnet
