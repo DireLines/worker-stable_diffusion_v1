@@ -34,6 +34,7 @@ from diffusers import (
 from PIL import Image
 from xformers.ops import MemoryEfficientAttentionFlashAttentionOp
 
+torch.backends.cuda.matmul.allow_tf32 = True
 MODEL_CACHE = "diffusers-cache"
 
 
