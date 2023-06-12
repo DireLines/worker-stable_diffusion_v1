@@ -145,6 +145,7 @@ class Predictor:
             print(pipe.unet.conv_out.state_dict()["weight"].stride())
         if use_model_offload:
             pipe.enable_model_cpu_offload()
+            pipe.enable_attention_slicing(1)
         output = pipe(
             prompt=[prompt] * num_outputs if prompt is not None else None,
             negative_prompt=[negative_prompt]*num_outputs if negative_prompt is not None else None,
