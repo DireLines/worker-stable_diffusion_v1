@@ -89,7 +89,6 @@ class Predictor:
         self.inpaint_pipe.enable_xformers_memory_efficient_attention()
 
     @torch.inference_mode()
-    # @torch.cuda.amp.autocast()
     def predict(self, prompt, negative_prompt, width, height, init_image, mask, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed, lora, lora_scale):
         '''
         Run a single prediction on the model
@@ -140,6 +139,10 @@ class Predictor:
             extra_kwargs['cross_attention_kwargs'] = {"scale": 0}
 
         generator = torch.Generator("cuda").manual_seed(seed)
+        print(pipe.unet.conv_out.state_dict()["weight"].stride())  # (2880, 9, 3, 1)
+        pipe.unet.to(memory_format=torch.channels_last)  # in-place operation
+        print(pipe.unet.conv_out.state_dict()["weight"].stride())
+        # pipe.enable_model_cpu_offload()
         output = pipe(
             prompt=[prompt] * num_outputs if prompt is not None else None,
             negative_prompt=[negative_prompt]*num_outputs if negative_prompt is not None else None,
