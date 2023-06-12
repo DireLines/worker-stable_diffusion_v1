@@ -17,6 +17,7 @@ def run(job):
     Run inference on the model.
     Returns output path, width the seed used to generate the image.
     '''
+    print(job)
     job_input = job['input']
     job_opts = job['opts']
 

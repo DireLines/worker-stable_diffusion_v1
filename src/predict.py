@@ -92,8 +92,7 @@ class Predictor:
         '''
         Run a single prediction on the model
         '''
-        if use_tf32:
-            torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cuda.matmul.allow_tf32 = use_tf32
         if seed is None:
             seed = int.from_bytes(os.urandom(2), "big")
 
