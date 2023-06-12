@@ -34,7 +34,7 @@ from diffusers import (
 from PIL import Image
 from xformers.ops import MemoryEfficientAttentionFlashAttentionOp
 
-torch.backends.cuda.matmul.allow_tf32 = True
+# torch.backends.cuda.matmul.allow_tf32 = True
 MODEL_CACHE = "diffusers-cache"
 
 
@@ -58,6 +58,7 @@ class Predictor:
             safety_checker=None,
             cache_dir=MODEL_CACHE,
             local_files_only=True,
+            # torch_dtype=torch.float16
         ).to("cuda")
         self.img2img_pipe = StableDiffusionImg2ImgPipeline(
             vae=self.txt2img_pipe.vae,
@@ -88,7 +89,7 @@ class Predictor:
         self.inpaint_pipe.enable_xformers_memory_efficient_attention()
 
     @torch.inference_mode()
-    @torch.cuda.amp.autocast()
+    # @torch.cuda.amp.autocast()
     def predict(self, prompt, negative_prompt, width, height, init_image, mask, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed, lora, lora_scale):
         '''
         Run a single prediction on the model
