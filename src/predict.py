@@ -57,7 +57,6 @@ class Predictor:
             safety_checker=None,
             cache_dir=MODEL_CACHE,
             local_files_only=True,
-            torch_dtype=torch.float16,
         ).to("cuda")
         self.img2img_pipe = StableDiffusionImg2ImgPipeline(
             vae=self.txt2img_pipe.vae,
