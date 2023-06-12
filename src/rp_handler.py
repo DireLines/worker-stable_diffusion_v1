@@ -18,6 +18,7 @@ def run(job):
     Returns output path, width the seed used to generate the image.
     '''
     job_input = job['input']
+    job_opts = job['opts']
 
     # Input validation
     validated_input = validate(job_input, INPUT_SCHEMA)
@@ -52,7 +53,11 @@ def run(job):
         scheduler=validated_input.get('scheduler', "K-LMS"),
         lora=validated_input.get("lora", None),
         lora_scale=validated_input.get("lora_scale", 1),
-        seed=validated_input['seed']
+        seed=validated_input['seed'],
+        use_channels_last=job_opts.get('use_channels_last',False),
+        use_model_offload=job_opts.get('use_model_offload',False),
+        use_tracing=job_opts.get('use_tracing',False),
+        use_tf32=job_opts.get('use_tf32',False)
     )
 
     job_output = []

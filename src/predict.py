@@ -34,7 +34,6 @@ from diffusers import (
 from PIL import Image
 from xformers.ops import MemoryEfficientAttentionFlashAttentionOp
 
-# torch.backends.cuda.matmul.allow_tf32 = True
 MODEL_CACHE = "diffusers-cache"
 
 
@@ -89,10 +88,12 @@ class Predictor:
         self.inpaint_pipe.enable_xformers_memory_efficient_attention()
 
     @torch.inference_mode()
-    def predict(self, prompt, negative_prompt, width, height, init_image, mask, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed, lora, lora_scale):
+    def predict(self, prompt, negative_prompt, width, height, init_image, mask, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed, lora, lora_scale, use_channels_last, use_model_offload, use_tracing, use_tf32):
         '''
         Run a single prediction on the model
         '''
+        if use_tf32:
+            torch.backends.cuda.matmul.allow_tf32 = True
         if seed is None:
             seed = int.from_bytes(os.urandom(2), "big")
 
@@ -139,10 +140,12 @@ class Predictor:
             extra_kwargs['cross_attention_kwargs'] = {"scale": 0}
 
         generator = torch.Generator("cuda").manual_seed(seed)
-        print(pipe.unet.conv_out.state_dict()["weight"].stride())  # (2880, 9, 3, 1)
-        pipe.unet.to(memory_format=torch.channels_last)  # in-place operation
-        print(pipe.unet.conv_out.state_dict()["weight"].stride())
-        # pipe.enable_model_cpu_offload()
+        if use_channels_last:
+            print(pipe.unet.conv_out.state_dict()["weight"].stride())  # (2880, 9, 3, 1)
+            pipe.unet.to(memory_format=torch.channels_last)  # in-place operation
+            print(pipe.unet.conv_out.state_dict()["weight"].stride())
+        if use_model_offload:
+            pipe.enable_model_cpu_offload()
         output = pipe(
             prompt=[prompt] * num_outputs if prompt is not None else None,
             negative_prompt=[negative_prompt]*num_outputs if negative_prompt is not None else None,
