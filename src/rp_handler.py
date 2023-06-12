@@ -19,7 +19,8 @@ def run(job):
     '''
     print(job)
     job_input = job['input']
-    job_opts = job['opts']
+    job_opts = job_input.pop('opts')
+
 
     # Input validation
     validated_input = validate(job_input, INPUT_SCHEMA)
