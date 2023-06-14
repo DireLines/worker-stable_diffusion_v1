@@ -59,7 +59,8 @@ def run(job):
         use_channels_last=job_opts.get('use_channels_last',False),
         use_model_offload=job_opts.get('use_model_offload',False),
         use_tracing=job_opts.get('use_tracing',False),
-        use_tf32=job_opts.get('use_tf32',False)
+        use_tf32=job_opts.get('use_tf32',False),
+        clear_cache=job_opts.get('clear_cache',False),
     )
 
     job_output = []

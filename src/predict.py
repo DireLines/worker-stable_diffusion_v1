@@ -88,10 +88,12 @@ class Predictor:
         self.inpaint_pipe.enable_xformers_memory_efficient_attention()
 
     @torch.inference_mode()
-    def predict(self, prompt, negative_prompt, width, height, init_image, mask, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed, lora, lora_scale, use_channels_last, use_model_offload, use_tracing, use_tf32):
+    def predict(self, prompt, negative_prompt, width, height, init_image, mask, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed, lora, lora_scale, use_channels_last, use_model_offload, use_tracing, use_tf32,clear_cache):
         '''
         Run a single prediction on the model
         '''
+        if clear_cache:
+            torch.cuda.empty_cache()
         torch.backends.cuda.matmul.allow_tf32 = use_tf32
         if seed is None:
             seed = int.from_bytes(os.urandom(2), "big")
@@ -140,9 +142,9 @@ class Predictor:
 
         generator = torch.Generator("cuda").manual_seed(seed)
         if use_channels_last:
-            print(pipe.unet.conv_out.state_dict()["weight"].stride())  # (2880, 9, 3, 1)
-            pipe.unet.to(memory_format=torch.channels_last)  # in-place operation
-            print(pipe.unet.conv_out.state_dict()["weight"].stride())
+            pipe.unet.to(memory_format=torch.channels_last)
+        else:
+            pipe.unet.to(memory_format=torch.contiguous_format)
         if use_model_offload:
             pipe.enable_model_cpu_offload()
             pipe.enable_attention_slicing(1)
