@@ -1,10 +1,7 @@
 [
   {
     "hardwareConfig": {
-      "endpointConfig": {
-        "gpuIds": "AMPERE_16",
-        "name": "16GB GPU"
-      }
+      "endpoint": "stable-diffusion-v1"
     },
     "input": {
       "audio": "https://github.com/runpod-workers/sample-inputs/raw/main/audio/Arthur.mp3",
