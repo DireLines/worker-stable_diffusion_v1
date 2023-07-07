@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run Tests
-        uses: direlines/runpod-test-runner@v1.3
+        uses: direlines/runpod-test-runner@v1.4
         with:
           image-tag: ${{ secrets.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:${{ matrix.model_name }}-dev
           runpod-api-key: ${{ secrets.RUNPOD_API_KEY }}
