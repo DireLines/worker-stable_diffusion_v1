@@ -19,7 +19,7 @@ jobs:
     environment: runpodnqs-dockerhub
     steps:
       - name: Run Tests
-        uses: direlines/runpod-test-runner@v1.1
+        uses: direlines/runpod-test-runner@v1.2
         with:
           image-tag: ${{ secrets.DOCKERHUB_REPO }}/${{ secrets.DOCKERHUB_IMG }}:${{ matrix.model_name }}-dev
           runpod-api-key: ${{ secrets.RUNPOD_API_KEY }}
